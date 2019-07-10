@@ -36,5 +36,15 @@ namespace ShadowBBR_Editor
 		{
 			Application.Exit();
 		}
+
+		private void Label2_Click(object sender, System.EventArgs e)
+		{
+
+		}
+
+		private void Editor_Load(object sender, System.EventArgs e)
+		{
+
+		}
 	}
 }
