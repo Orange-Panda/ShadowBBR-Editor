@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using System.IO;
+using System.Media;
 using System.Windows.Forms;
 
 namespace ShadowBBR_Editor
@@ -7,6 +9,8 @@ namespace ShadowBBR_Editor
 	{
 		private bool toolbarSelected = false;
 		private Point toolbarSelectOffset;
+		private bool playbackActive = false;
+		private SoundPlayer playback = new SoundPlayer();
 
 		public Editor()
 		{
@@ -37,14 +41,21 @@ namespace ShadowBBR_Editor
 			Application.Exit();
 		}
 
-		private void Label2_Click(object sender, System.EventArgs e)
+		private void playButton_Click(object sender, System.EventArgs e)
 		{
-
-		}
-
-		private void Editor_Load(object sender, System.EventArgs e)
-		{
-
+			if (playbackActive)
+			{
+				playback.Stop();
+				playbackActive = false;
+				playButton.Image = Image.FromFile(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + @"\icons\Media-Play-128.png");
+			}
+			else
+			{
+				playback = new SoundPlayer(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + @"\audio\test.wav");
+				playback.PlayLooping();
+				playbackActive = true;
+				playButton.Image = Image.FromFile(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + @"\icons\Media-Pause-128.png");
+			}
 		}
 	}
 }
