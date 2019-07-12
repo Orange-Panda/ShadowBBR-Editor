@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowBBR-Editor", "ShadowBBR-Editor.csproj", "{2BF46F45-3795-4B43-BF5D-9333C036C709}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowBBR-Editor", "ShadowBBR-Editor.csproj", "{0481DD9F-622D-4DAC-BD33-F5B68C3AB719}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2BF46F45-3795-4B43-BF5D-9333C036C709}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2BF46F45-3795-4B43-BF5D-9333C036C709}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2BF46F45-3795-4B43-BF5D-9333C036C709}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2BF46F45-3795-4B43-BF5D-9333C036C709}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0481DD9F-622D-4DAC-BD33-F5B68C3AB719}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0481DD9F-622D-4DAC-BD33-F5B68C3AB719}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0481DD9F-622D-4DAC-BD33-F5B68C3AB719}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0481DD9F-622D-4DAC-BD33-F5B68C3AB719}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E47A8C6C-3416-4391-84E5-1AF3028BF02F}
+		SolutionGuid = {5687D4FC-1BFA-46EC-870D-DD9ABBA615AA}
 	EndGlobalSection
 EndGlobal
