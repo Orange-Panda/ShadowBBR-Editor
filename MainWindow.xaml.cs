@@ -24,5 +24,15 @@ namespace ShadowBBR_Editor
 		{
 			InitializeComponent();
 		}
+
+		private void ImportButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void ExportButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
 	}
 }

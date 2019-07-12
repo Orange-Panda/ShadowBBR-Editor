@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShadowBBR_Editor"
         mc:Ignorable="d"
-		FontFamily="Segoe UI Light"
+		FontFamily="Segoe UI"
 		FontSize="12"
 		TextBlock.Foreground="White"
-        Title="Shadow Beat Boxing - Beatmap Editor" Height="900" Width="1600" MinWidth="1200" MinHeight="700" Background="#FF202325" Icon="icon/glove.ico" Foreground="White" >
+        Title="Shadow Beat Boxing - Beatmap Editor" Width="1200" Height="700" MinWidth="1200" MinHeight="700" Background="#FF202325" Icon="icon/glove.ico" Foreground="White" >
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="auto"/>
@@ -27,18 +27,29 @@
 
 		<!--Metadata-->
 		<Rectangle Grid.Column="1" Grid.Row="1" Fill="#FF36393F"/>
-		<Image x:Name="AlbumCover" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Margin="32" Source="icon/cover.png"/>
-		<StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Width="512" Height="192" Margin="240,0,0,0" VerticalAlignment="Center">
-			<TextBlock Text="Song Title" Margin="0,0,0,4" FontSize="20" FontFamily="Segoe UI" FontWeight="Bold" HorizontalAlignment="Left"/>
-			<TextBox x:Name="TitleField" Margin="0,0,0,8" FontSize="16" Width="384" HorizontalAlignment="Left" FontFamily="Segoe UI Semibold"/>
-			<TextBlock Text="Artist" Margin="0,0,0,4" FontSize="20" FontFamily="Segoe UI" FontWeight="Bold" HorizontalAlignment="Left"/>
-			<TextBox x:Name="ArtistField" Margin="0,0,0,8" FontSize="16" Width="384" HorizontalAlignment="Left" FontFamily="Segoe UI Semibold"/>
-			<TextBlock Text="BPM" Margin="0,0,0,4" FontSize="20" FontFamily="Segoe UI" FontWeight="Bold" HorizontalAlignment="Left"/>
-			<TextBox x:Name="BPMField" Margin="0,0,0,8" FontSize="16" Width="96" HorizontalAlignment="Left" FontFamily="Segoe UI Semibold"/>
+		<StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+			<Image x:Name="AlbumCover" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Margin="32,32,16,32" Source="icon/cover.png"/>
+			<StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center">
+				<TextBlock Style="{StaticResource InputFieldLabel}" Text="Song Title"/>
+				<TextBox Style="{StaticResource InputField}" x:Name="TitleField" Width="384"/>
+				<TextBlock Style="{StaticResource InputFieldLabel}" Text="Artist"/>
+				<TextBox Style="{StaticResource InputField}" x:Name="ArtistField" Width="384"/>
+				<TextBlock Style="{StaticResource InputFieldLabel}" Text="BPM"/>
+				<TextBox Style="{StaticResource InputField}" x:Name="BPMField" Width="64"/>
+			</StackPanel>
 		</StackPanel>
 
 		<!--Utilities-->
-		<Rectangle Grid.Column="3" Grid.Row="1" Fill="#FF202325"/>
+		<StackPanel Grid.Column="3" Grid.Row="1" Background="#FF202325" HorizontalAlignment="Center" VerticalAlignment="Center">
+			<Button Style="{StaticResource Utility Button}" x:Name="ImportButton" Margin="16,16,16,0" Click="ImportButton_Click">
+				<Image Source="icon/import.png"/>
+			</Button>
+			<TextBlock Text="Import" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" TextWrapping="Wrap" TextAlignment="Center" Width="80"/>
+			<Button Style="{StaticResource Utility Button}" x:Name="ExportButton" Margin="16,16,16,0" Click="ExportButton_Click">
+				<Image Source="icon/export.png"/>
+			</Button>
+			<TextBlock Text="Save and Export" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Width="80" TextWrapping="Wrap" TextAlignment="Center"/>
+		</StackPanel>
 
 		<!--Timeline-->
 		<Rectangle Grid.Column="1" Grid.Row="3" Fill="#FF2F3136" Grid.ColumnSpan="3"/>
