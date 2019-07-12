@@ -10,6 +10,14 @@
 			<Setter Property="FontWeight" Value="Bold"/>
 			<Setter Property="HorizontalAlignment" Value="Left"/>
 		</Style>
+		<Style x:Key="UtilityLabel" TargetType="TextBlock">
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="Width" Value="80"/>
+			<Setter Property="TextWrapping" Value="Wrap"/>
+			<Setter Property="TextAlignment" Value="Center"/>
+		</Style>
 		<Style x:Key="InputField" TargetType="TextBox">
 			<Setter Property="Margin" Value="0,4"/>
 			<Setter Property="FontSize" Value="18"/>
@@ -21,6 +29,44 @@
 			<Setter Property="Background" Value="{x:Null}"/>
 			<Setter Property="BorderBrush" Value="{x:Null}"/>
 			<Setter Property="Foreground" Value="{x:Null}"/>
+			<Setter Property="Margin" Value="16,16,16,0"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Border Name="Border" CornerRadius="2" BorderThickness="1" Background="{x:Null}" BorderBrush="{x:Null}">
+							<ContentPresenter Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsKeyboardFocused" Value="true">
+								<Setter TargetName="Border" Property="BorderBrush" Value="{x:Null}" />
+							</Trigger>
+							<Trigger Property="IsDefaulted" Value="true">
+								<Setter TargetName="Border" Property="BorderBrush" Value="{x:Null}" />
+							</Trigger>
+							<Trigger Property="IsMouseOver" Value="true">
+								<Setter TargetName="Border" Property="Background" Value="{x:Null}" />
+							</Trigger>
+							<Trigger Property="IsPressed" Value="true">
+								<Setter TargetName="Border" Property="Background" Value="{x:Null}" />
+								<Setter TargetName="Border" Property="BorderBrush" Value="{x:Null}" />
+							</Trigger>
+							<Trigger Property="IsEnabled" Value="false">
+								<Setter TargetName="Border" Property="Background" Value="{x:Null}" />
+								<Setter TargetName="Border" Property="BorderBrush" Value="{x:Null}" />
+								<Setter Property="Foreground" Value="#888888"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="Timeline Button" TargetType="{x:Type Button}">
+			<Setter Property="SnapsToDevicePixels" Value="true"/>
+			<Setter Property="OverridesDefaultStyle" Value="true"/>
+			<Setter Property="Background" Value="{x:Null}"/>
+			<Setter Property="BorderBrush" Value="{x:Null}"/>
+			<Setter Property="Foreground" Value="{x:Null}"/>
+			<Setter Property="Margin" Value="5,5,5,5"/>
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="{x:Type Button}">

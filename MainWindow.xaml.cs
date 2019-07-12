@@ -20,6 +20,8 @@ namespace ShadowBBR_Editor
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		private bool playbackAcive = false;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -31,6 +33,27 @@ namespace ShadowBBR_Editor
 		}
 
 		private void ExportButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void PlayButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (playbackAcive)
+			{
+				MediaPlayer.Pause();
+				playbackAcive = false;
+				PlayIcon.Source = new BitmapImage(new Uri(@"/icon/play.png", UriKind.Relative));
+			}
+			else
+			{
+				MediaPlayer.Play();
+				playbackAcive = true;
+				PlayIcon.Source = new BitmapImage(new Uri(@"/icon/pause.png", UriKind.Relative));
+			}
+		}
+
+		private void RestartButton_Click(object sender, RoutedEventArgs e)
 		{
 
 		}
