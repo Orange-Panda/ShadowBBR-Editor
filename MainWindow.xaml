@@ -35,7 +35,10 @@
 				<TextBlock Style="{StaticResource InputFieldLabel}" Text="Artist"/>
 				<TextBox Style="{StaticResource InputField}" x:Name="ArtistField" Width="384"/>
 				<TextBlock Style="{StaticResource InputFieldLabel}" Text="BPM"/>
-				<TextBox Style="{StaticResource InputField}" x:Name="BPMField" Width="64"/>
+				<StackPanel Orientation="Horizontal">
+					<TextBox Style="{StaticResource InputField}" x:Name="BPMField" Width="64" LostFocus="BPMField_LostFocus"/>
+					<Slider Name="BPMSlider" Margin="10,0,0,0" VerticalAlignment="Center" Value="128" Minimum="80" Maximum="170" LargeChange="1" SmallChange="0.1" Width="250" ValueChanged="BPMSlider_ValueChanged"/>
+				</StackPanel>
 			</StackPanel>
 		</StackPanel>
 
@@ -51,8 +54,11 @@
 			</Button>
 			<TextBlock Style="{StaticResource UtilityLabel}" Text="Save and Export" />
 		</StackPanel>
-
+		
 		<!--Timeline-->
+		<Rectangle Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Fill="#FF191C1E" Margin="20,20,20,90"/>
+
+		<!--Timeline Controls-->
 		<MediaElement Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" x:Name="MediaPlayer" LoadedBehavior="Manual" UnloadedBehavior="Manual" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="80" Height="45" MediaOpened="MediaPlayer_MediaOpened" MediaEnded="MediaPlayer_MediaEnded"/>
 		<StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Height="48" VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,30">
 			<Button Style="{StaticResource Timeline Button}" x:Name="AudioImportButton" Click="AudioImportButton_Click">
@@ -65,12 +71,12 @@
 				<Image x:Name="RestartIcon" Source="icon/share.png"/>
 			</Button>
 		</StackPanel>
-		<StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Left" Orientation="Horizontal" Margin="10">
+		<StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Left" Orientation="Horizontal" Margin="20">
 			<Button Style="{StaticResource Timeline Button}" x:Name="VolumeButton" Click="VolumeButton_Click" Margin="0,0,5,0">
 				<Image x:Name="VolumeIcon" Source="icon/volume.png" Margin="-3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 			</Button>
 			<Slider Name="VolumeSlider" Margin="0" Width="125" VerticalAlignment="Center" Value="1" Maximum="1" ValueChanged="VolumeSlider_ValueChanged" LargeChange="0.15" SmallChange="0.03"/>
 		</StackPanel>
-		<Slider Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Name="TimelineSlider" Margin="5,5,5,13" Width="500" HorizontalAlignment="Center" VerticalAlignment="Bottom" ValueChanged="TimelineSlider_ValueChanged" SmallChange="5000" Maximum="100000" LargeChange="1000"/>
+		<Slider Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Name="TimelineSlider" Margin="5,5,5,10" Width="500" HorizontalAlignment="Center" VerticalAlignment="Bottom" ValueChanged="TimelineSlider_ValueChanged" SmallChange="5000" Maximum="100000" LargeChange="1000"/>
 	</Grid>
 </Window>

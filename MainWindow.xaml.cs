@@ -18,13 +18,10 @@ using System.Windows.Threading;
 
 namespace ShadowBBR_Editor
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : Window
 	{
 		private bool playbackAcive = false;
-		private double mutePosition = 0.5;
+		private double lastSliderPosition = 0.5;
 		private DispatcherTimer dispatcherTimer;
 		private bool sliderAnimated = false;
 
@@ -39,11 +36,12 @@ namespace ShadowBBR_Editor
 		{
 			MediaPlayer.Volume = VolumeSlider.Value;
 			dispatcherTimer = new DispatcherTimer();
-			dispatcherTimer.Interval = TimeSpan.FromMilliseconds(100);
+			dispatcherTimer.Interval = TimeSpan.FromMilliseconds(25);
 			dispatcherTimer.Tick += new EventHandler(UpdateTimelineSlider);
 			dispatcherTimer.Start();
 		}
 
+		#region Utilities
 		private void ImportButton_Click(object sender, RoutedEventArgs e)
 		{
 
@@ -53,7 +51,9 @@ namespace ShadowBBR_Editor
 		{
 
 		}
+		#endregion
 
+		#region Timeline Controls
 		private void PlayButton_Click(object sender, RoutedEventArgs e)
 		{
 			if (playbackAcive)
@@ -90,8 +90,13 @@ namespace ShadowBBR_Editor
 
 		private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			VolumeIcon.Source = new BitmapImage(new Uri(VolumeSlider.Value == 0 ?  @"/icon/muted.png" : VolumeSlider.Value < 0.45 ? @"/icon/volume-low.png" : @"/icon/volume.png", UriKind.Relative));
+			VolumeIcon.Source = new BitmapImage(new Uri(GetVolumeString(), UriKind.Relative));
 			MediaPlayer.Volume = VolumeSlider.Value;
+		}
+
+		private string GetVolumeString()
+		{
+			return VolumeSlider.Value == 0 ? @"/icon/volume-muted.png" : VolumeSlider.Value > 0.8 ? @"/icon/volume-loud.png" : VolumeSlider.Value > 0.25 ?  @"/icon/volume.png" : @"/icon/volume-low.png";
 		}
 
 		private void VolumeButton_Click(object sender, RoutedEventArgs e)
@@ -101,9 +106,9 @@ namespace ShadowBBR_Editor
 
 		private void SetMuteState(bool value)
 		{
-			mutePosition = value ? Math.Max(VolumeSlider.Value, 0.1) : mutePosition;
-			VolumeSlider.Value = MediaPlayer.Volume = value ? 0 : mutePosition;
-			VolumeIcon.Source = new BitmapImage(new Uri(VolumeSlider.Value == 0 ? @"/icon/muted.png" : VolumeSlider.Value < 0.45 ? @"/icon/volume-low.png" : @"/icon/volume.png", UriKind.Relative));
+			lastSliderPosition = value ? Math.Max(VolumeSlider.Value, 0.1) : lastSliderPosition;
+			VolumeSlider.Value = MediaPlayer.Volume = value ? 0 : lastSliderPosition;
+			VolumeIcon.Source = new BitmapImage(new Uri(GetVolumeString(), UriKind.Relative));
 		}
 
 		private void MediaPlayer_MediaOpened(object sender, RoutedEventArgs e)
@@ -113,8 +118,7 @@ namespace ShadowBBR_Editor
 
 		private void MediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
 		{
-			MediaPlayer.Stop();
-			PlayIcon.Source = new BitmapImage(new Uri(@"/icon/play.png", UriKind.Relative));
+			MediaPlayer.Position = new TimeSpan(0);
 		}
 
 		private void TimelineSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -130,5 +134,29 @@ namespace ShadowBBR_Editor
 			TimelineSlider.Value = MediaPlayer.Position.TotalMilliseconds;
 			sliderAnimated = false;
 		}
+		#endregion
+
+		#region Metadata
+		private void BPMSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+			double newValue = Math.Max(Math.Min(Math.Round(BPMSlider.Value, Mouse.LeftButton == MouseButtonState.Pressed ? 0 : 1), BPMSlider.Maximum), BPMSlider.Minimum);
+			BPMSlider.Value = newValue;
+			BPMField.Text = newValue.ToString();
+		}
+
+		private void BPMField_LostFocus(object sender, RoutedEventArgs e)
+		{
+			if (double.TryParse(BPMField.Text, out double value))
+			{
+				double newValue = Math.Max(Math.Min(value, BPMSlider.Maximum), BPMSlider.Minimum);
+				BPMSlider.Value = newValue;
+				BPMField.Text = newValue.ToString();
+			}
+			else
+			{
+				BPMField.Text = BPMSlider.Value.ToString();
+			}
+		}
+		#endregion
 	}
 }

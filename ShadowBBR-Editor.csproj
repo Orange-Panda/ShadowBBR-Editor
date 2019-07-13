@@ -110,8 +110,9 @@
     <Resource Include="icon\close.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="icon\volume-loud.png" />
     <Resource Include="icon\volume-low.png" />
-    <Resource Include="icon\muted.png" />
+    <Resource Include="icon\volume-muted.png" />
     <Content Include="testAudio\test.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
