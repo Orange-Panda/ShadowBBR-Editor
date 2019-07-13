@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace ShadowBBR_Editor
 {
@@ -23,11 +24,24 @@ namespace ShadowBBR_Editor
 	public partial class MainWindow : Window
 	{
 		private bool playbackAcive = false;
-		private string musicPlaybackLocation;
+		private double mutePosition = 0.5;
+		private DispatcherTimer dispatcherTimer;
+		private bool sliderAnimated = false;
 
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			InitializeValues();
+		}
+
+		private void InitializeValues()
+		{
+			MediaPlayer.Volume = VolumeSlider.Value;
+			dispatcherTimer = new DispatcherTimer();
+			dispatcherTimer.Interval = TimeSpan.FromMilliseconds(100);
+			dispatcherTimer.Tick += new EventHandler(UpdateTimelineSlider);
+			dispatcherTimer.Start();
 		}
 
 		private void ImportButton_Click(object sender, RoutedEventArgs e)
@@ -58,7 +72,7 @@ namespace ShadowBBR_Editor
 
 		private void RestartButton_Click(object sender, RoutedEventArgs e)
 		{
-
+			MediaPlayer.Position = new TimeSpan(0);
 		}
 
 		private void AudioImportButton_Click(object sender, RoutedEventArgs e)
@@ -72,6 +86,49 @@ namespace ShadowBBR_Editor
 				playbackAcive = false;
 				PlayIcon.Source = new BitmapImage(new Uri(@"/icon/play.png", UriKind.Relative));
 			}
+		}
+
+		private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+			VolumeIcon.Source = new BitmapImage(new Uri(VolumeSlider.Value == 0 ?  @"/icon/muted.png" : VolumeSlider.Value < 0.45 ? @"/icon/volume-low.png" : @"/icon/volume.png", UriKind.Relative));
+			MediaPlayer.Volume = VolumeSlider.Value;
+		}
+
+		private void VolumeButton_Click(object sender, RoutedEventArgs e)
+		{
+			SetMuteState(VolumeSlider.Value != 0);
+		}
+
+		private void SetMuteState(bool value)
+		{
+			mutePosition = value ? Math.Max(VolumeSlider.Value, 0.1) : mutePosition;
+			VolumeSlider.Value = MediaPlayer.Volume = value ? 0 : mutePosition;
+			VolumeIcon.Source = new BitmapImage(new Uri(VolumeSlider.Value == 0 ? @"/icon/muted.png" : VolumeSlider.Value < 0.45 ? @"/icon/volume-low.png" : @"/icon/volume.png", UriKind.Relative));
+		}
+
+		private void MediaPlayer_MediaOpened(object sender, RoutedEventArgs e)
+		{
+			TimelineSlider.Maximum = MediaPlayer.NaturalDuration.TimeSpan.TotalMilliseconds;
+		}
+
+		private void MediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
+		{
+			MediaPlayer.Stop();
+			PlayIcon.Source = new BitmapImage(new Uri(@"/icon/play.png", UriKind.Relative));
+		}
+
+		private void TimelineSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+			if (sliderAnimated) return;
+			TimeSpan ts = new TimeSpan(0, 0, 0, 0, (int)TimelineSlider.Value);
+			MediaPlayer.Position = ts;
+		}
+
+		private void UpdateTimelineSlider(object sender, EventArgs e)
+		{
+			sliderAnimated = true;
+			TimelineSlider.Value = MediaPlayer.Position.TotalMilliseconds;
+			sliderAnimated = false;
 		}
 	}
 }
