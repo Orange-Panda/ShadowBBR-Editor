@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +23,7 @@ namespace ShadowBBR_Editor
 	public partial class MainWindow : Window
 	{
 		private bool playbackAcive = false;
+		private string musicPlaybackLocation;
 
 		public MainWindow()
 		{
@@ -56,6 +59,19 @@ namespace ShadowBBR_Editor
 		private void RestartButton_Click(object sender, RoutedEventArgs e)
 		{
 
+		}
+
+		private void AudioImportButton_Click(object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+
+			if (openFileDialog.ShowDialog() == true)
+			{
+				MediaPlayer.Stop();
+				MediaPlayer.Source = new Uri(openFileDialog.FileName, UriKind.Absolute);
+				playbackAcive = false;
+				PlayIcon.Source = new BitmapImage(new Uri(@"/icon/play.png", UriKind.Relative));
+			}
 		}
 	}
 }

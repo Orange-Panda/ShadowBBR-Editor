@@ -52,8 +52,11 @@
 		</StackPanel>
 
 		<!--Timeline-->
-		<MediaElement Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3"  x:Name="MediaPlayer" Source="testAudio/bit.mp4" LoadedBehavior="Manual" UnloadedBehavior="Manual" Margin="200,100"/>
+		<MediaElement Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3"  x:Name="MediaPlayer" LoadedBehavior="Manual" UnloadedBehavior="Manual" Margin="200,100"/>
 		<StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Height="48" VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,30">
+			<Button Style="{StaticResource Timeline Button}" x:Name="AudioImportButton" Click="AudioImportButton_Click">
+				<Image x:Name="AudioImportIcon" Source="icon/properties.png"/>
+			</Button>
 			<Button Style="{StaticResource Timeline Button}" x:Name="PlayButton" Click="PlayButton_Click">
 				<Image x:Name="PlayIcon" Source="icon/play.png"/>
 			</Button>

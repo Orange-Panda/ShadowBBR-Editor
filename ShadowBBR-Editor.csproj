@@ -110,7 +110,6 @@
     <Resource Include="icon\close.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="testAudio\bit.mp4" />
     <Content Include="testAudio\test.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
