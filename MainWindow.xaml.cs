@@ -20,10 +20,19 @@ namespace ShadowBBR_Editor
 {
 	public partial class MainWindow : Window
 	{
+		private const int UpdateInterval = 25;
+		private const string PlayImageLocation = @"/icon/play.png";
+		private const string PauseImageLocation = @"/icon/pause.png";
 		private bool playbackAcive = false;
 		private double lastSliderPosition = 0.5;
 		private DispatcherTimer dispatcherTimer;
 		private bool sliderAnimated = false;
+
+		public int SongBeatLength => (int)Math.Floor(MediaPlayer.NaturalDuration.TimeSpan.TotalMinutes * BPMSlider.Value);
+		public string VolumeString => VolumeSlider.Value == 0 ? @"/icon/volume-muted.png" : VolumeSlider.Value > 0.75 ? @"/icon/volume-loud.png" : VolumeSlider.Value > 0.2 ? @"/icon/volume.png" : @"/icon/volume-low.png";
+		public int SongMaxMinutes => (int)MediaPlayer.NaturalDuration.TimeSpan.TotalMinutes;
+		public int SongMaxSeconds => MediaPlayer.NaturalDuration.TimeSpan.Seconds;
+		public int SongBeatPosition => (int)Math.Floor(MediaPlayer.Position.TotalMinutes * BPMSlider.Value);
 
 		public MainWindow()
 		{
@@ -35,8 +44,10 @@ namespace ShadowBBR_Editor
 		private void InitializeValues()
 		{
 			MediaPlayer.Volume = VolumeSlider.Value;
-			dispatcherTimer = new DispatcherTimer();
-			dispatcherTimer.Interval = TimeSpan.FromMilliseconds(25);
+			dispatcherTimer = new DispatcherTimer
+			{
+				Interval = TimeSpan.FromMilliseconds(UpdateInterval)
+			};
 			dispatcherTimer.Tick += new EventHandler(UpdateTimelineSlider);
 			dispatcherTimer.Start();
 		}
@@ -60,19 +71,43 @@ namespace ShadowBBR_Editor
 			{
 				MediaPlayer.Pause();
 				playbackAcive = false;
-				PlayIcon.Source = new BitmapImage(new Uri(@"/icon/play.png", UriKind.Relative));
+				PlayIcon.Source = new BitmapImage(new Uri(PlayImageLocation, UriKind.Relative));
 			}
 			else
 			{
 				MediaPlayer.Play();
 				playbackAcive = true;
-				PlayIcon.Source = new BitmapImage(new Uri(@"/icon/pause.png", UriKind.Relative));
+				PlayIcon.Source = new BitmapImage(new Uri(PauseImageLocation, UriKind.Relative));
 			}
 		}
 
 		private void RestartButton_Click(object sender, RoutedEventArgs e)
 		{
-			MediaPlayer.Position = new TimeSpan(0);
+			if (double.TryParse(RestartField.Text, out double value))
+			{
+				MediaPlayer.Position = new TimeSpan(0, 0, 0, 0, (int)Math.Ceiling(value / BPMSlider.Value * 60000));
+			}
+			else
+			{
+				MediaPlayer.Position = new TimeSpan(0, 0, 0, 0);
+				RestartField.Text = "0";
+			}
+		}
+
+		private void RestartField_LostFocus(object sender, RoutedEventArgs e)
+		{
+			if (double.TryParse(RestartField.Text, out double value))
+			{
+				if (MediaPlayer.NaturalDuration.HasTimeSpan)
+				{
+					double newValue = Math.Max(Math.Min(value, SongBeatLength), 0);
+					RestartField.Text = newValue.ToString();
+				}
+			}
+			else
+			{
+				RestartField.Text = "0";
+			}
 		}
 
 		private void AudioImportButton_Click(object sender, RoutedEventArgs e)
@@ -84,19 +119,14 @@ namespace ShadowBBR_Editor
 				MediaPlayer.Stop();
 				MediaPlayer.Source = new Uri(openFileDialog.FileName, UriKind.Absolute);
 				playbackAcive = false;
-				PlayIcon.Source = new BitmapImage(new Uri(@"/icon/play.png", UriKind.Relative));
+				PlayIcon.Source = new BitmapImage(new Uri(PlayImageLocation, UriKind.Relative));
 			}
 		}
 
 		private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			VolumeIcon.Source = new BitmapImage(new Uri(GetVolumeString(), UriKind.Relative));
+			VolumeIcon.Source = new BitmapImage(new Uri(VolumeString, UriKind.Relative));
 			MediaPlayer.Volume = VolumeSlider.Value;
-		}
-
-		private string GetVolumeString()
-		{
-			return VolumeSlider.Value == 0 ? @"/icon/volume-muted.png" : VolumeSlider.Value > 0.8 ? @"/icon/volume-loud.png" : VolumeSlider.Value > 0.25 ?  @"/icon/volume.png" : @"/icon/volume-low.png";
 		}
 
 		private void VolumeButton_Click(object sender, RoutedEventArgs e)
@@ -108,7 +138,7 @@ namespace ShadowBBR_Editor
 		{
 			lastSliderPosition = value ? Math.Max(VolumeSlider.Value, 0.1) : lastSliderPosition;
 			VolumeSlider.Value = MediaPlayer.Volume = value ? 0 : lastSliderPosition;
-			VolumeIcon.Source = new BitmapImage(new Uri(GetVolumeString(), UriKind.Relative));
+			VolumeIcon.Source = new BitmapImage(new Uri(VolumeString, UriKind.Relative));
 		}
 
 		private void MediaPlayer_MediaOpened(object sender, RoutedEventArgs e)
@@ -133,6 +163,12 @@ namespace ShadowBBR_Editor
 			sliderAnimated = true;
 			TimelineSlider.Value = MediaPlayer.Position.TotalMilliseconds;
 			sliderAnimated = false;
+
+			if (MediaPlayer.NaturalDuration.HasTimeSpan)
+			{
+				TimelineObjectiveLabel.Text = string.Format("{0}:{1} ({2})", SongMaxMinutes, SongMaxSeconds.ToString("D2"), SongBeatLength);
+				TimelineCurrentLabel.Text = string.Format("{0}:{1} ({2})", (int)MediaPlayer.Position.TotalMinutes, MediaPlayer.Position.Seconds.ToString("D2"), SongBeatPosition);
+			}
 		}
 		#endregion
 
