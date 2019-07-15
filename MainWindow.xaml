@@ -27,7 +27,7 @@
 
 		<!--Metadata-->
 		<Rectangle Grid.Column="1" Grid.Row="1" Fill="#FF36393F"/>
-		<Image Grid.Row="1" Grid.Column="1" x:Name="BPMIcon" Source="icon/bpmOn.png" Width="16" Height="16" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8,8,5,8" Visibility="Hidden"/>
+		<Image Grid.Row="1" Grid.Column="1" x:Name="BPMIcon" Source="icon/bpmOn.png" Width="32" Height="32" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8,8,5,8" Visibility="Hidden"/>
 		<StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
 			<Image x:Name="AlbumCover" Margin="32,32,16,32" Source="icon/cover.png"/>
 			<StackPanel HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center">
@@ -66,6 +66,9 @@
 		<!--Timeline Controls-->
 		<MediaElement Grid.Column="1" Grid.Row="1" x:Name="MediaPlayer" LoadedBehavior="Manual" UnloadedBehavior="Manual" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="80" Height="45" MediaOpened="MediaPlayer_MediaOpened" MediaEnded="MediaPlayer_MediaEnded"/>
 		<StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Height="48" VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,30">
+			<Button Style="{StaticResource Timeline Button}" x:Name="PlaybackSpeedButton" Click="PlaybackSpeedButton_Click">
+				<TextBlock x:Name="PlaybackSpeedText" TextAlignment="Center" FontSize="22" Text="1x" FontWeight="Bold" Foreground="White" Width="56"/>
+			</Button>
 			<Button Style="{StaticResource Timeline Button}" x:Name="AudioImportButton" Click="AudioImportButton_Click">
 				<Image x:Name="AudioImportIcon" Source="icon/properties.png"/>
 			</Button>
@@ -75,7 +78,7 @@
 			<Button Style="{StaticResource Timeline Button}" x:Name="RestartButton" Click="RestartButton_Click">
 				<Image x:Name="RestartIcon" Source="icon/share.png"/>
 			</Button>
-			<TextBox x:Name="RestartField" Width="38" Margin="0,5,5,5" Text="0" Height="20" LostFocus="RestartField_LostFocus"/>
+			<TextBox x:Name="RestartField" Width="56" Margin="0,5,5,5" Text="0" LostFocus="RestartField_LostFocus" FontSize="18" Height="26"/>
 		</StackPanel>
 		<StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Left" Orientation="Horizontal" Margin="20">
 			<Button Style="{StaticResource Timeline Button}" x:Name="VolumeButton" Click="VolumeButton_Click" Margin="0,0,5,0">
