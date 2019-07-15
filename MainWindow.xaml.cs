@@ -1,19 +1,8 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace ShadowBBR_Editor
@@ -23,10 +12,14 @@ namespace ShadowBBR_Editor
 		private const int UpdateInterval = 25;
 		private const string PlayImageLocation = @"/icon/play.png";
 		private const string PauseImageLocation = @"/icon/pause.png";
+		private const string OpenImageLocation = @"icon/bpmOff.png";
+		private const string CloseImageLocation = @"icon/bpmOn.png";
 		private bool playbackAcive = false;
 		private double lastSliderPosition = 0.5;
 		private DispatcherTimer dispatcherTimer;
 		private bool sliderAnimated = false;
+		private int lastBPM;
+		private bool bpmIconFill;
 
 		public int SongBeatLength => (int)Math.Floor(MediaPlayer.NaturalDuration.TimeSpan.TotalMinutes * BPMSlider.Value);
 		public string VolumeString => VolumeSlider.Value == 0 ? @"/icon/volume-muted.png" : VolumeSlider.Value > 0.75 ? @"/icon/volume-loud.png" : VolumeSlider.Value > 0.2 ? @"/icon/volume.png" : @"/icon/volume-low.png";
@@ -163,6 +156,14 @@ namespace ShadowBBR_Editor
 			sliderAnimated = true;
 			TimelineSlider.Value = MediaPlayer.Position.TotalMilliseconds;
 			sliderAnimated = false;
+			BPMIcon.Visibility = playbackAcive ? Visibility.Visible : Visibility.Hidden;
+
+			if (lastBPM != SongBeatPosition && Mouse.LeftButton == MouseButtonState.Released)
+			{
+				lastBPM = SongBeatPosition;
+				bpmIconFill = !bpmIconFill;
+				BPMIcon.Source = new BitmapImage(new Uri(bpmIconFill ? CloseImageLocation : OpenImageLocation, UriKind.Relative)); 
+			}
 
 			if (MediaPlayer.NaturalDuration.HasTimeSpan)
 			{
