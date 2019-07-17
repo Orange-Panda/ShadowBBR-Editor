@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ShadowBBR_Editor
@@ -12,7 +13,21 @@ namespace ShadowBBR_Editor
 		private int targetBeat;
 		private double canvasLeft;
 		private double mouseXInitial;
-		private bool primed = false;
+		private static BeatmapBeat hovered;
+
+		public int TargetBeat
+		{
+			get
+			{
+				return targetBeat;
+			}
+			set
+			{
+				targetBeat = value;
+				canvas.ToolTip = value.ToString();
+				RefreshPosition();
+			}
+		}
 
 		public BeatmapBeat(BeatmapTimeline timeline, int height, int targetBeat)
 		{
@@ -22,66 +37,88 @@ namespace ShadowBBR_Editor
 			this.timeline = timeline;
 			outerRectangle.Height = height;
 			innerRectangle.Height = height;
-
-			SetupTooltip();
+			canvas.ToolTip = targetBeat.ToString();
 
 			MouseEnter += BeatmapBeat_MouseEnter;
 			MouseLeave += BeatmapBeat_MouseLeave;
 			MouseLeftButtonDown += BeatmapBeat_MouseLeftButtonDown;
 		}
 
-		public void SetupTooltip()
+		internal void RefreshPosition()
 		{
-			canvas.ToolTip = targetBeat.ToString();
+			Canvas.SetLeft(this, (timeline.BeatPixelDistance * TargetBeat) - 2);
+			Canvas.SetTop(this, timeline.elementTop);
 		}
 
-		public void SetBeat(int targetBeat)
+		/// <summary>
+		/// Sets the selection state of the beat.
+		/// </summary>
+		/// <param name="state">State to set the beat as</param>
+		private void SetBeatState(BeatState state)
 		{
-			this.targetBeat = targetBeat;
-			SetupTooltip();
+			switch (state)
+			{
+				case BeatState.None:
+					hovered = hovered == this ? null : hovered;
+					outerRectangle.Opacity = 0.3;
+					break;
+				case BeatState.Hovering:
+					hovered = this;
+					outerRectangle.Opacity = 0.5;
+					break;
+				case BeatState.Grab:
+					outerRectangle.Opacity = 0.6;
+					break;
+			}
 		}
 
+		#region Events
 		private void BeatmapBeat_MouseEnter(object sender, MouseEventArgs e)
 		{
-			outerRectangle.Opacity = 0.5;
-			primed = true;
+			SetBeatState(BeatState.Hovering);
 		}
 
 		private void BeatmapBeat_MouseLeave(object sender, MouseEventArgs e)
 		{
-			outerRectangle.Opacity = 0.3;
-			primed = false;
+			SetBeatState(BeatState.None);
 		}
 
 		private void BeatmapBeat_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			if (primed)
+			if (hovered == this)
 			{
-				outerRectangle.Opacity = 0.6;
+				SetBeatState(BeatState.Grab);
+
 				canvasLeft = Canvas.GetLeft(this);
 				mouseXInitial = Mouse.GetPosition(timeline).X;
+				ToolTip = "";
+
 				timeline.MouseMove += Parent_MouseMove;
 				timeline.MouseLeftButtonUp += Parent_MouseLeftButtonUp;
-				ToolTip = "";
 			}
 		}
 
 		private void Parent_MouseMove(object sender, MouseEventArgs e)
 		{
 			Canvas.SetLeft(this, canvasLeft - (mouseXInitial - Mouse.GetPosition(timeline).X));
-			if (Canvas.GetLeft(this) > timeline.pixelDistance - 2)
-				Canvas.SetLeft(this, timeline.pixelDistance - 2);
+
+			//Clamp the position to the edges of the canvas
+			if (Canvas.GetLeft(this) > timeline.canvasPixelDistance - 2)
+				Canvas.SetLeft(this, timeline.canvasPixelDistance - 2);
 			if (Canvas.GetLeft(this) < -2)
 				Canvas.SetLeft(this, -2);
 		}
 
 		private void Parent_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
-			outerRectangle.Opacity = 0.3;
-			primed = false;
 			timeline.MouseMove -= Parent_MouseMove;
 			timeline.MouseLeftButtonUp -= Parent_MouseLeftButtonUp;
-			timeline.RefreshBeat(this);
+
+			SetBeatState(BeatState.None);
+			TargetBeat = (int)Math.Round((Canvas.GetLeft(this) + 2) / timeline.BeatPixelDistance);
 		}
+		#endregion
+
+		private enum BeatState { None, Hovering, Grab }
 	}
 }

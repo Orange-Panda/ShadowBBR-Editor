@@ -163,12 +163,10 @@ namespace ShadowBBR_Editor
 			dispatcherTimer.Tick += new EventHandler(UpdateMetronome);
 			dispatcherTimer.Start();
 
-			BeatmapTimeline timeline = new BeatmapTimeline(1153, 304);
-			timeline.Setup(60, 150, 4);
+			BeatmapTimeline timeline = new BeatmapTimeline(1145, 295);
+			timeline.Setup(256, 64, 4);
 			TimelineViewer.Children.Add(timeline);
 			timeline.AddBeat(12);
-			timeline.AddBeat(25);
-			timeline.AddBeat(26);
 		}
 
 		/// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -11,8 +12,10 @@ namespace ShadowBBR_Editor
 	{
 		List<BeatmapBeat> beats = new List<BeatmapBeat>();
 		List<BeatmapLabel> labels = new List<BeatmapLabel>();
-		int width, height, innerHeight, elementTop, beatAmount;
-		internal int pixelDistance;
+		int width, height, innerHeight, beatAmount;
+		internal int canvasPixelDistance, elementTop, labelSpacing, labelFrequency;
+
+		public double BeatPixelDistance => (double)labelSpacing / labelFrequency;
 
 		public BeatmapTimeline(int width, int height)
 		{
@@ -33,19 +36,12 @@ namespace ShadowBBR_Editor
 			BeatmapBeat beat = new BeatmapBeat(this, innerHeight, beatNum);
 			beats.Add(beat);
 			canvas.Children.Add(beat);
-			Canvas.SetTop(beat, elementTop);
-			Canvas.SetLeft(beat, elementTop);
+			beat.RefreshPosition();
 		}
 
-		public void RefreshBeat(BeatmapBeat beat)
+		public void Setup(int beatAmount, int labelSpacing, int labelFrequency = 4)
 		{
-			beat.SetBeat((int)(Canvas.GetLeft(beat) + 2 * beatAmount / pixelDistance));
-		}
-
-		public void Setup(int beatAmount, int spacing, int labelFrequency = 4)
-		{
-			this.beatAmount = beatAmount;
-
+			//Creates labels for the timeline
 			BeatmapLabel start = new BeatmapLabel(0);
 			labels.Add(start);
 			canvas.Children.Add(start);
@@ -64,9 +60,10 @@ namespace ShadowBBR_Editor
 
 			for (int i = 0; i < labels.Count; i++)
 			{
-				Canvas.SetLeft(labels[i], spacing * i);
+				Canvas.SetLeft(labels[i], labelSpacing * i);
 				Canvas.SetTop(labels[i], 1);
 			}
+			// -- END OF TIMELINE LABELING
 
 			Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
 			Arrange(new System.Windows.Rect(0, 0, width, height));
@@ -84,8 +81,13 @@ namespace ShadowBBR_Editor
 			border.Height = height - 46;
 			innerHeight = height - 46 - 2;
 
-			pixelDistance = (int)border.Width - 1;
-			canvas.Width = (spacing * (labels.Count - 1)) + (int)end.ActualWidth;
+			canvasPixelDistance = (int)border.Width - 1;
+			canvas.Width = (labelSpacing * (labels.Count - 1)) + (int)end.ActualWidth;
+
+			//Store values for later reference
+			this.beatAmount = beatAmount;
+			this.labelSpacing = labelSpacing;
+			this.labelFrequency = labelFrequency;
 		}
 	}
 }
