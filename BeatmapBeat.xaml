@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="ShadowBBR_Editor.BeatmapBeat"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ShadowBBR_Editor"
+             mc:Ignorable="d">
+	<Canvas x:Name="canvas" Width="5">
+		<Rectangle x:Name="outerRectangle" Fill="White" Width="5" Opacity="0.3"/>
+		<Rectangle x:Name="innerRectangle" Fill="Gray" Canvas.Left="2" Width="1"/>
+	</Canvas>
+</UserControl>

@@ -42,6 +42,7 @@
 				</StackPanel>
 			</StackPanel>
 		</StackPanel>
+		<MediaElement Grid.Column="1" Grid.Row="1" x:Name="MediaPlayer" LoadedBehavior="Manual" UnloadedBehavior="Manual" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="80" Height="45" MediaOpened="MediaPlayer_MediaOpened" MediaEnded="MediaPlayer_MediaEnded"/>
 
 		<!--Utilities-->
 		<Rectangle Grid.Column="3" Grid.Row="1" Fill="#FF1C1F21"/>
@@ -58,13 +59,11 @@
 		
 		<!--Timeline-->
 		<Rectangle Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Fill="#FF191C1E" Margin="20,20,20,90"/>
-		<ScrollViewer Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Margin="20,20,20,90" PanningMode="HorizontalOnly" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto">
-			<StackPanel Orientation="Horizontal">
-			</StackPanel>
-		</ScrollViewer>
+		<DockPanel x:Name="TimelineViewer" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Margin="20,20,20,90">
+			
+		</DockPanel>
 		
 		<!--Timeline Controls-->
-		<MediaElement Grid.Column="1" Grid.Row="1" x:Name="MediaPlayer" LoadedBehavior="Manual" UnloadedBehavior="Manual" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="80" Height="45" MediaOpened="MediaPlayer_MediaOpened" MediaEnded="MediaPlayer_MediaEnded"/>
 		<StackPanel Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Height="48" VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,30">
 			<Button Style="{StaticResource Timeline Button}" x:Name="PlaybackSpeedButton" Click="PlaybackSpeedButton_Click">
 				<TextBlock x:Name="PlaybackSpeedText" TextAlignment="Center" FontSize="22" Text="1x" FontWeight="Bold" Foreground="White" Width="56"/>
@@ -97,6 +96,5 @@
 				<Image x:Name="ZoomIcon" Source="icon/zoom.png" Margin="-3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 			</Button>
 		</StackPanel>
-
 	</Grid>
 </Window>
