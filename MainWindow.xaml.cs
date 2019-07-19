@@ -164,9 +164,11 @@ namespace ShadowBBR_Editor
 			dispatcherTimer.Start();
 
 			BeatmapTimeline timeline = new BeatmapTimeline(1145, 295);
-			timeline.Setup(256, 64, 4);
+			timeline.Setup(256, 80, 4);
 			TimelineViewer.Children.Add(timeline);
 			timeline.AddBeat(12);
+			timeline.AddBeat(14);
+			timeline.AddBeat(16);
 		}
 
 		/// <summary>

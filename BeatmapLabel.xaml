@@ -6,9 +6,7 @@
              xmlns:local="clr-namespace:ShadowBBR_Editor"
              mc:Ignorable="d">
 	<DockPanel>
-		<Rectangle DockPanel.Dock="Bottom" Height="4" Width="1" Fill="#FF404040" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
-		<Border Background="White" BorderBrush="DarkGray" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Padding="1" DockPanel.Dock="Bottom">
-			<TextBlock x:Name="text" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top" Text="4" FontFamily="Arial"/>
-		</Border>
+		<Rectangle DockPanel.Dock="Bottom" Height="3" Width="1" Fill="White" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+		<TextBlock x:Name="text" HorizontalAlignment="Left" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Text="4" FontFamily="Arial" Foreground="White" Margin="0,1,1,1"/>
 	</DockPanel>
 </UserControl>
